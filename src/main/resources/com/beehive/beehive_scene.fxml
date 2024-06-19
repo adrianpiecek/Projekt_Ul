@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -10,44 +10,34 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="VBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.beehive.BeeApplication">
   <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <AnchorPane fx:id="AnchorPane" maxHeight="-1.0" maxWidth="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
       <children>
-        <Label alignment="CENTER" layoutX="9.0" layoutY="7.0" prefHeight="26.0" prefWidth="111.0" style="&#10;" text="ilość pszczół" textAlignment="CENTER" wrapText="false">
+        <Label alignment="CENTER" layoutX="9.0" layoutY="7.0" prefHeight="26.0" prefWidth="111.0" style="&#10;" text="ilość pszczół" textAlignment="CENTER" wrapText="false" AnchorPane.leftAnchor="9.0">
           <font>
             <Font size="18.0" />
           </font>
         </Label>
-            <TextField fx:id="tfBeeQuantity" layoutX="183.0" layoutY="7.0" prefHeight="26.0" prefWidth="102.0" />
-            <Label alignment="CENTER" layoutX="9.0" layoutY="34.0" prefHeight="27.0" prefWidth="128.0" style="&#10;" text="pojemnosc ula" textAlignment="CENTER" wrapText="false">
+            <TextField fx:id="InitialBeeCountTextField" layoutX="183.0" layoutY="7.0" prefHeight="26.0" prefWidth="102.0" AnchorPane.leftAnchor="183.0" />
+            <Label alignment="CENTER" layoutX="9.0" layoutY="34.0" prefHeight="27.0" prefWidth="156.0" style="&#10;" text="żywotność pszczół" textAlignment="CENTER" wrapText="false" AnchorPane.leftAnchor="9.0">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="tfHiveCapacity" layoutX="183.0" layoutY="34.0" prefHeight="26.0" prefWidth="102.0" />
-            <Label alignment="CENTER" layoutX="9.0" layoutY="61.0" prefHeight="27.0" prefWidth="156.0" style="&#10;" text="żywotność pszczół" textAlignment="CENTER" wrapText="false">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <TextField fx:id="tfMaxVisits" layoutX="183.0" layoutY="61.0" prefHeight="26.0" prefWidth="102.0" />
-            <ImageView fx:id="HiveImage" fitHeight="142.0" fitWidth="184.0" layoutX="261.0" layoutY="140.0" pickOnBounds="true" preserveRatio="true">
+            <TextField fx:id="MaxVisitsTextField" layoutX="183.0" layoutY="35.0" prefHeight="26.0" prefWidth="102.0" AnchorPane.leftAnchor="183.0" />
+            <ImageView fx:id="HiveImageView" fitHeight="142.0" fitWidth="184.0" layoutX="468.0" layoutY="129.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="54.342857360839844">
                <image>
                   <Image url="@../../images/beehive.png" />
                </image>
+               <viewport>
+                  <Rectangle2D />
+               </viewport>
             </ImageView>
-            <ImageView fx:id="BeeImage" fitHeight="64.0" fitWidth="54.0" layoutX="572.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../images/bee.png" />
-               </image>
-            </ImageView>
+            <Label fx:id="BeeCountLabel" layoutX="14.0" layoutY="61.0" prefHeight="18.0" prefWidth="270.0" text="łączna ilość pszczół:" AnchorPane.leftAnchor="9.0" />
+            <Label fx:id="HiveCountLabel" layoutX="14.0" layoutY="79.0" prefHeight="18.0" prefWidth="270.0" text="ilość pszczół w ulu:" AnchorPane.leftAnchor="9.0" />
+          <Button fx:id="StartButton" layoutX="546.0" layoutY="360.0" mnemonicParsing="false" onAction="#StartSimulation" prefHeight="26.0" prefWidth="80.0" text="Start" textAlignment="CENTER" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
       </children>
     </AnchorPane>
-      <ButtonBar prefHeight="45.0" prefWidth="640.0">
-        <buttons>
-          <Button fx:id="StartButton" mnemonicParsing="false" onAction="#StartSimulation" prefHeight="26.0" prefWidth="80.0" text="Start" textAlignment="CENTER" />
-        </buttons>
-      </ButtonBar>
   </children>
 </VBox>
