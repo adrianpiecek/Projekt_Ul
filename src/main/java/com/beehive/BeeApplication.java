@@ -13,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import java.net.URL;
 import java.util.random.RandomGenerator;
 import java.io.IOException;
 
@@ -25,7 +26,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class BeeApplication extends Application {
-    final Image beeImage = new Image("file:resources/images/bee.png");
+    Image beeImage = new Image(String.valueOf(getClass().getResource("bartek1.png")));
     private final List<ImageView> beeImageViews = new ArrayList<>();
     //private AnchorPane root;
 
@@ -60,27 +61,25 @@ public class BeeApplication extends Application {
     }
 
     public void StartSimulation() {
-        Hive hive = new Hive(parseInt(InitialBeeCountTextField.getText()));
-        QueenBee queenBee = new QueenBee(hive);
         int InitialBees = Integer.parseInt(InitialBeeCountTextField.getText());
-        int maxHiveCapacity = hive.getHiveCapacity();
         int maxVisits = Integer.parseInt(MaxVisitsTextField.getText());
-        queenBee.start();
 
         for (int i = 0; i < InitialBees; i++) {
             ImageView newBeeImageView = new ImageView(beeImage);
             double StartX = RandomGenerator.getDefault().nextInt(0, 200);
             double StartY = RandomGenerator.getDefault().nextInt(120, 360);
+            newBeeImageView.setFitHeight(30);
+            newBeeImageView.setFitWidth(30);
             newBeeImageView.setTranslateX(StartX);
             newBeeImageView.setTranslateY(StartY);
             beeImageViews.add(newBeeImageView);
             AnchorPane.getChildren().add(newBeeImageView);
 
         }
-        simulation = new BeeSimulation(InitialBees, maxHiveCapacity, maxVisits, beeImageViews);
+        simulation = new BeeSimulation(InitialBees, maxVisits, beeImageViews);
         simulation.start();
 
-        scheduler = Executors.newScheduledThreadPool(8);
+        scheduler = Executors.newScheduledThreadPool(1);
         scheduler.scheduleAtFixedRate(this::updateHiveStatus, 0, 1, TimeUnit.SECONDS);
     }
 
@@ -88,9 +87,13 @@ public class BeeApplication extends Application {
     private void updateHiveStatus() {
         Platform.runLater(() -> {
             Hive hive = simulation.getHive();
-            HiveCountLabel.setText("Ilość pszczół w ulu: " + hive.getHiveBeesCount());
+            HiveCountLabel.setText("Ilość pszczół w ulu: " + hive.getHiveBeesCount() + "/" + hive.getHiveCapacity());
             BeeCountLabel.setText("Łączna ilość pszczół: " + hive.getTotalBeesCount());
         });
+    }
+
+    public Hive getHive() {
+        return simulation.getHive();
     }
 
     @Override
