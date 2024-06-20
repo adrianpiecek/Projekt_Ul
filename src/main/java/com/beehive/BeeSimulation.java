@@ -10,19 +10,15 @@ public class BeeSimulation {
     private final Hive hive;
     private final QueenBee queenBee;
     private final int maxVisits;
-    private final int maxHiveCapacity;
-    private final int initialBees;
     private final ExecutorService executor;
-    private final List<ImageView> beeImageViews;
 
-    public BeeSimulation(int initialBees, int maxVisits, List<ImageView> beeImageViews) {
+
+    public BeeSimulation(int initialBees, int maxVisits) {
         this.executor = Executors.newFixedThreadPool(initialBees + 1); // +1 dla królowej
         this.maxVisits = maxVisits;
         this.hive = new Hive(initialBees, maxVisits, this);
-        this.maxHiveCapacity = hive.getHiveCapacity();
-        this.initialBees = initialBees;
         this.queenBee = new QueenBee(hive);
-        this.beeImageViews = beeImageViews;
+
     }
 
     public void start() {

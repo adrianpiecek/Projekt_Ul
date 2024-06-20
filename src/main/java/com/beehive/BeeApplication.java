@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 import static com.beehive.Hive.hiveSemaphore;
 
 public class BeeApplication extends Application{
-    static Image beeImage = new Image(String.valueOf(BeeApplication.class.getResource("beemiarz.png")));
+    static Image beeImage = new Image(String.valueOf(BeeApplication.class.getResource("bee.png")));
     static List<ImageView> beeImageViews = new ArrayList<>();
     static double hiveX;
     static double hiveY;
@@ -97,9 +97,11 @@ public class BeeApplication extends Application{
             Hive hive = simulation.getHive();
             BeeCountLabel.setText("Łączna ilość pszczół: " + hive.getTotalBeesCount() + "\nIlość pszczół w ulu: " + hive.getHiveBeesCount() + "/" + hive.getHiveCapacity());
             if(hive.getHatchedBees()>0){
-                createAndAddNewBee();
-                hive.decrementHiveBeesCount();
-                hive.decrementHatchedBees();
+                for(int i = 0; i < hive.getHatchedBees(); i++) {
+                    createAndAddNewBee();
+                    hive.decrementHiveBeesCount();
+                    hive.decrementHatchedBees();
+                }
                 hiveSemaphore.release();
             }
         });

@@ -101,7 +101,7 @@ public class Hive {
                 try {
                     if(!hiveSemaphore.tryAcquire(150, TimeUnit.MILLISECONDS)){
                         System.out.println("Królowa czeka na miejsce w ulu...");
-                        Thread.sleep(RandomGenerator.getDefault().nextInt(400,1000));
+                        Thread.sleep(RandomGenerator.getDefault().nextInt(50,150));
                         continue;
                     }
                     else{
@@ -114,13 +114,12 @@ public class Hive {
         if (hiveBeesCount.get() < hiveCapacity) {
             // Symulacja składania jaj
             System.out.println("Królowa składa jaja...");
-            Thread.sleep(RandomGenerator.getDefault().nextInt(250+100*min(maxVisits,5),500+100*min(maxVisits,5)));
+            Thread.sleep(RandomGenerator.getDefault().nextInt(300*(totalBeesCount.get()/hiveCapacity),300*(totalBeesCount.get()/hiveCapacity)+20));
             this.hiveBeesCount.incrementAndGet();
             System.out.println("Jajo złożone.");
-            Thread.sleep(RandomGenerator.getDefault().nextInt(250,750));
+            Thread.sleep(RandomGenerator.getDefault().nextInt(5*totalBeesCount.get()+1,5*totalBeesCount.get()+40));
             this.hatchedBees.incrementAndGet();
             System.out.println(hatchedBees.get() + " Jaj gotowe do wyklucia. Liczba pszczół w ulu: " + hiveBeesCount + " / " + hiveCapacity);
-            //hiveSemaphore.release();
         }else{
             hiveSemaphore.release();
         }
