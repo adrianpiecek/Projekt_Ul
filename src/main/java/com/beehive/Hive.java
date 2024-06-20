@@ -63,10 +63,10 @@ public class Hive {
             // Symulacja składania jaj
             hiveSemaphore.acquire();
             System.out.println("Królowa składa jaja...");
-            Thread.sleep(RandomGenerator.getDefault().nextInt(2000*maxVisits,2000*maxVisits+4000));
+            Thread.sleep(RandomGenerator.getDefault().nextInt(250*maxVisits,250*maxVisits+250));
             this.hiveBeesCount.incrementAndGet();
             System.out.println("Jajo złożone.");
-            Thread.sleep(RandomGenerator.getDefault().nextInt(2500,4000));
+            Thread.sleep(RandomGenerator.getDefault().nextInt(250,750));
             this.hatchedBees.incrementAndGet();
             System.out.println(hatchedBees.get() + " Jaj gotowe do wyklucia. Liczba pszczół w ulu: " + hiveBeesCount + " / " + hiveCapacity);
             hiveSemaphore.release();

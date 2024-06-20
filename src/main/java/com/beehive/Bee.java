@@ -53,7 +53,7 @@ public class Bee extends Thread {
             while (visits < maxVisits) {
                 hive.enterHive(this);
                 Platform.runLater(() -> fly(startX, startY, hiveX, hiveY));
-                Thread.sleep(RandomGenerator.getDefault().nextInt(1100,2500)); // Symulacja przebywania w ulu
+                Thread.sleep(RandomGenerator.getDefault().nextInt(1000,2000)); // Symulacja przebywania w ulu
                 hive.exitHive(this);
                 int randomX = RandomGenerator.getDefault().nextInt(0, (int)hiveX - 100);
                 int randomY = RandomGenerator.getDefault().nextInt(120, 360);
@@ -61,7 +61,7 @@ public class Bee extends Thread {
                 this.startX= randomX;
                 this.startY= randomY;
                 visits++;
-                Thread.sleep(RandomGenerator.getDefault().nextInt(1100,2500)); // Symulacja przebywania poza ulem
+                Thread.sleep(RandomGenerator.getDefault().nextInt(3000,5000)); // Symulacja przebywania poza ulem
             }
             //zakończenie procesu
             System.out.println("Pszczola " + this.getId() + " umiera.");
