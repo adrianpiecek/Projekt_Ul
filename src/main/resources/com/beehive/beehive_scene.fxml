@@ -4,26 +4,42 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Light.Distant?>
+<?import javafx.scene.effect.Lighting?>
+<?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
 <VBox fx:id="VBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.beehive.BeeApplication">
   <children>
-    <AnchorPane fx:id="AnchorPane" maxHeight="-1.0" maxWidth="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
+    <AnchorPane fx:id="AnchorPane" blendMode="SRC_ATOP" maxHeight="-1.0" maxWidth="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
       <children>
-        <Label alignment="CENTER" layoutX="9.0" layoutY="7.0" prefHeight="26.0" prefWidth="111.0" style="&#10;" text="ilość pszczół" textAlignment="CENTER" wrapText="false" AnchorPane.leftAnchor="9.0">
+            <ImageView fitHeight="454.0" fitWidth="727.0" layoutX="-72.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@background.jpg" />
+               </image>
+            </ImageView>
+        <Label layoutX="9.0" layoutY="7.0" prefHeight="27.0" prefWidth="156.0" style="&#10;" text="ilość pszczół" textFill="WHITE" wrapText="false" AnchorPane.leftAnchor="9.0">
           <font>
-            <Font size="18.0" />
+            <Font name="System Bold" size="18.0" />
           </font>
+               <effect>
+                  <DropShadow blurType="ONE_PASS_BOX" height="9.28" radius="4.8725000000000005" spread="0.83" width="12.21" />
+               </effect>
         </Label>
             <TextField fx:id="InitialBeeCountTextField" layoutX="183.0" layoutY="7.0" prefHeight="26.0" prefWidth="102.0" AnchorPane.leftAnchor="183.0" />
-            <Label alignment="CENTER" layoutX="9.0" layoutY="34.0" prefHeight="27.0" prefWidth="156.0" style="&#10;" text="żywotność pszczół" textAlignment="CENTER" wrapText="false" AnchorPane.leftAnchor="9.0">
+            <Label alignment="CENTER" layoutX="9.0" layoutY="34.0" prefHeight="27.0" prefWidth="156.0" style="&#10;" text="żywotność pszczół" textFill="WHITE" wrapText="false" AnchorPane.leftAnchor="9.0">
                <font>
-                  <Font size="18.0" />
+                  <Font name="System Bold" size="18.0" />
                </font>
+               <effect>
+                  <DropShadow blurType="ONE_PASS_BOX" height="12.21" radius="7.8025" spread="0.62" />
+               </effect>
             </Label>
             <TextField fx:id="MaxVisitsTextField" layoutX="183.0" layoutY="35.0" prefHeight="26.0" prefWidth="102.0" AnchorPane.leftAnchor="183.0" />
             <ImageView fx:id="HiveImageView" fitHeight="142.0" fitWidth="184.0" layoutX="468.0" layoutY="129.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="54.342857360839844">
@@ -33,9 +49,28 @@
                <viewport>
                   <Rectangle2D />
                </viewport>
+               <effect>
+                  <Lighting diffuseConstant="2.0" specularConstant="0.85" specularExponent="23.22" surfaceScale="2.99">
+                     <bumpInput>
+                        <Shadow />
+                     </bumpInput>
+                     <light>
+                        <Light.Distant azimuth="214.66" />
+                     </light>
+                  </Lighting>
+               </effect>
             </ImageView>
-            <Label fx:id="BeeCountLabel" layoutX="14.0" layoutY="61.0" prefHeight="18.0" prefWidth="270.0" text="łączna ilość pszczół:" AnchorPane.leftAnchor="9.0" />
-            <Label fx:id="HiveCountLabel" layoutX="14.0" layoutY="79.0" prefHeight="18.0" prefWidth="270.0" text="ilość pszczół w ulu:" AnchorPane.leftAnchor="9.0" />
+            <Label fx:id="BeeCountLabel" alignment="TOP_LEFT" layoutX="14.0" layoutY="61.0" prefHeight="36.0" prefWidth="270.0" text="łączna ilość pszczół:" textFill="WHITE" AnchorPane.leftAnchor="14.0">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <effect>
+                  <DropShadow blurType="ONE_PASS_BOX" spread="0.61">
+                     <color>
+                        <Color opacity="0.6221374273300171" />
+                     </color>
+                  </DropShadow>
+               </effect></Label>
           <Button fx:id="StartButton" layoutX="546.0" layoutY="360.0" mnemonicParsing="false" onAction="#StartSimulation" prefHeight="26.0" prefWidth="80.0" text="Start" textAlignment="CENTER" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
       </children>
     </AnchorPane>

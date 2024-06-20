@@ -26,7 +26,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class BeeApplication extends Application{
-    static Image beeImage = new Image(String.valueOf(BeeApplication.class.getResource("bartek1.png")));
+    static Image beeImage = new Image(String.valueOf(BeeApplication.class.getResource("bee.png")));
     static List<ImageView> beeImageViews = new ArrayList<>();
     static double hiveX;
     static double hiveY;
@@ -93,8 +93,7 @@ public class BeeApplication extends Application{
     private void updateHiveStatus() {
         Platform.runLater(() -> {
             Hive hive = simulation.getHive();
-            HiveCountLabel.setText("Ilość pszczół w ulu: " + hive.getHiveBeesCount() + "/" + hive.getHiveCapacity());
-            BeeCountLabel.setText("Łączna ilość pszczół: " + hive.getTotalBeesCount());
+            BeeCountLabel.setText("Łączna ilość pszczół: " + hive.getTotalBeesCount() + "\nIlość pszczół w ulu: " + hive.getHiveBeesCount() + "/" + hive.getHiveCapacity());
             if(hive.getHatchedBees()>0){
                 createAndAddNewBee();
                 hive.decrementHiveBeesCount();
@@ -112,7 +111,6 @@ public class BeeApplication extends Application{
             simulation.stop();
         }
     }
-
 
     public static void main(String[] args) {
         launch();

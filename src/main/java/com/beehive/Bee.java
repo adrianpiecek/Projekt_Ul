@@ -51,13 +51,18 @@ public class Bee extends Thread {
     public void run() {
         try {
             while (visits < maxVisits) {
-                hive.enterHive(this);
-                Platform.runLater(() -> fly(startX, startY, hiveX, hiveY));
+                if(hive.getHiveBeesCount() >= hiveCapacity){
+                    System.out.println("Pszczola " + this.getId() + " nie moze wejsc do ulu, bo jest pelne.");
+                    Thread.sleep(RandomGenerator.getDefault().nextInt(1000,2000));
+                    continue;
+                }
+                int entranceChosen = hive.enterHive(this);
+                Platform.runLater(() -> fly(startX, startY, hiveX, entranceChosen*hiveY));
                 Thread.sleep(RandomGenerator.getDefault().nextInt(1000,2000)); // Symulacja przebywania w ulu
                 hive.exitHive(this);
                 int randomX = RandomGenerator.getDefault().nextInt(0, (int)hiveX - 100);
                 int randomY = RandomGenerator.getDefault().nextInt(120, 360);
-                Platform.runLater(() -> fly(hiveX, hiveY, randomX, randomY));
+                Platform.runLater(() -> fly(hiveX, entranceChosen*hiveY, randomX, randomY));
                 this.startX= randomX;
                 this.startY= randomY;
                 visits++;
@@ -68,7 +73,12 @@ public class Bee extends Thread {
             beeImageView.visibleProperty().set(false);
             hive.decrementTotalBeesCount();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.out.println("Pszczole " + this.getId() + " przerwano.");
+            try {
+                Thread.sleep(RandomGenerator.getDefault().nextInt(100,2500));
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 }
