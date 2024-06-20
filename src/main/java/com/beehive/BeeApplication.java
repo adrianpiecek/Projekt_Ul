@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 import static com.beehive.Hive.hiveSemaphore;
 
 public class BeeApplication extends Application{
-    static Image beeImage = new Image(String.valueOf(BeeApplication.class.getResource("bee.png")));
+    static Image beeImage = new Image(String.valueOf(BeeApplication.class.getResource("beemiarz.png")));
     static List<ImageView> beeImageViews = new ArrayList<>();
     static double hiveX;
     static double hiveY;
@@ -57,15 +57,17 @@ public class BeeApplication extends Application{
         stage.setTitle("Bee Simulator");
         stage.setScene(scene);
         stage.show();
+        stage.getIcons().add(beeImage);
+        stage.resizableProperty().setValue(Boolean.FALSE);
     }
 
     public void StartSimulation() {
         int InitialBees = Integer.parseInt(InitialBeeCountTextField.getText());
         int maxVisits = Integer.parseInt(MaxVisitsTextField.getText());
 
-        hiveX = HiveImageView.getLayoutX();
+        hiveX = HiveImageView.getLayoutX() + 50;
         hiveY = HiveImageView.getLayoutY();
-        simulation = new BeeSimulation(InitialBees, maxVisits, beeImageViews);
+        simulation = new BeeSimulation(InitialBees, maxVisits);
 
         //załadowanie obrazków pszczół i stworzenie ich
         for (int i = 0; i < InitialBees; i++) {
@@ -73,7 +75,7 @@ public class BeeApplication extends Application{
         }
         simulation.start();
 
-        scheduler = Executors.newScheduledThreadPool(1);
+        scheduler = Executors.newScheduledThreadPool(6);
         scheduler.scheduleAtFixedRate(this::updateHiveStatus, 0, 1, TimeUnit.SECONDS);
     }
 
