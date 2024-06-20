@@ -12,7 +12,6 @@ public class QueenBee extends Thread {
         try {
             while (true) {
                 hive.layEggs();
-                Thread.sleep(5000); // Symulacja czasu między składaniem jaj
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

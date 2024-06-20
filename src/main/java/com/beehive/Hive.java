@@ -13,17 +13,18 @@ public class Hive {
     private final AtomicInteger totalBeesCount = new AtomicInteger(0); // Liczba pszczół łącznie
     private final AtomicInteger hatchedBees = new AtomicInteger(0); // Liczba wyklutych pszczół
     private final int maxVisits;
+    private final BeeSimulation simulation;
 
-    public Hive(int initialBees,int maxVisits){
+    public Hive(int initialBees,int maxVisits, BeeSimulation simulation){
         hiveCapacity = (int)(floor((double) initialBees /2))-1;
         hiveSemaphore = new Semaphore(hiveCapacity, true);
         this.maxVisits = maxVisits;
+        this.simulation = simulation;
     }
     public void enterHive(Bee bee) throws InterruptedException {
         hiveSemaphore.acquire();
         hiveBeesCount.incrementAndGet();
-        System.out.println("Bee " + bee.getId() + " entered the hive. Bees inside: " + hiveBeesCount);
-
+        System.out.println("Bee " + bee.getId() + " entered the hive. Bees inside: " + hiveBeesCount + "/" + hiveCapacity);
     }
     public void exitHive(Bee bee) {
         hiveBeesCount.decrementAndGet();
@@ -32,11 +33,17 @@ public class Hive {
     }
 
 
-    public int incrementTotalBeesCount() {
-        return totalBeesCount.incrementAndGet();
+    public void incrementTotalBeesCount() {
+        totalBeesCount.incrementAndGet();
+    }
+    public void decrementTotalBeesCount() {
+        totalBeesCount.decrementAndGet();
     }
     public int getHiveBeesCount() {
         return hiveBeesCount.get();
+    }
+    public void decrementHiveBeesCount() {
+        hiveBeesCount.decrementAndGet();
     }
     public int getTotalBeesCount() {
         return totalBeesCount.get();
@@ -54,19 +61,15 @@ public class Hive {
     public void layEggs() throws InterruptedException {
         if (hiveBeesCount.get() < hiveCapacity) {
             // Symulacja składania jaj
-            System.out.println("Królowa składa jaja...");
-            Thread.sleep(RandomGenerator.getDefault().nextInt(2500*maxVisits,2500*maxVisits+4000));
             hiveSemaphore.acquire();
-            this.totalBeesCount.incrementAndGet();
+            System.out.println("Królowa składa jaja...");
+            Thread.sleep(RandomGenerator.getDefault().nextInt(2000*maxVisits,2000*maxVisits+4000));
             this.hiveBeesCount.incrementAndGet();
             System.out.println("Jajo złożone.");
             Thread.sleep(RandomGenerator.getDefault().nextInt(2500,4000));
-//            hatchedBees.incrementAndGet();
-//            System.out.println("Jajo wyklute.");
-//            hiveSemaphore.release();
-            System.out.println("Liczba pszczół w ulu: " + hiveBeesCount + " / " + hiveCapacity);
-        } else {
-            System.out.println("Nie ma miejsca na jaja.");
+            this.hatchedBees.incrementAndGet();
+            System.out.println(hatchedBees.get() + " Jaj gotowe do wyklucia. Liczba pszczół w ulu: " + hiveBeesCount + " / " + hiveCapacity);
+            hiveSemaphore.release();
         }
     }
 }

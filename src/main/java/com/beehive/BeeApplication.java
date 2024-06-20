@@ -26,10 +26,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class BeeApplication extends Application{
-    Image beeImage = new Image(String.valueOf(getClass().getResource("bartek1.png")));
-    private final List<ImageView> beeImageViews = new ArrayList<>();
-    private double hiveX;
-    private double hiveY;
+    static Image beeImage = new Image(String.valueOf(BeeApplication.class.getResource("bartek1.png")));
+    static List<ImageView> beeImageViews = new ArrayList<>();
+    static double hiveX;
+    static double hiveY;
 
     private BeeSimulation simulation;
     private ScheduledExecutorService scheduler;
@@ -65,19 +65,10 @@ public class BeeApplication extends Application{
 
         hiveX = HiveImageView.getLayoutX();
         hiveY = HiveImageView.getLayoutY();
-        simulation = new BeeSimulation(InitialBees, maxVisits, beeImageViews,hiveX, hiveY);
+        simulation = new BeeSimulation(InitialBees, maxVisits, beeImageViews);
 
-        //załadowanie obrazków pszczół
+        //załadowanie obrazków pszczół i stworzenie ich
         for (int i = 0; i < InitialBees; i++) {
-//            ImageView newBeeImageView = new ImageView(beeImage);
-//            double StartX = RandomGenerator.getDefault().nextInt(0, (int)hiveX- 100);
-//            double StartY = RandomGenerator.getDefault().nextInt(120, 360);
-//            newBeeImageView.setFitHeight(30);
-//            newBeeImageView.setFitWidth(30);
-//            newBeeImageView.setX(StartX);
-//            newBeeImageView.setY(StartY);
-//            beeImageViews.add(newBeeImageView);
-//            AnchorPane.getChildren().add(newBeeImageView);
             createAndAddNewBee();
         }
         simulation.start();
@@ -94,7 +85,7 @@ public class BeeApplication extends Application{
         newBeeImageView.setFitWidth(30);
         newBeeImageView.setX(startX);
         newBeeImageView.setY(startY);
-        Bee newBee = simulation.createNewBee(newBeeImageView, startX, startY, hiveX, hiveY);
+        simulation.createNewBee(newBeeImageView, startX, startY);
         beeImageViews.add(newBeeImageView);
         AnchorPane.getChildren().add(newBeeImageView);
     }
@@ -104,6 +95,11 @@ public class BeeApplication extends Application{
             Hive hive = simulation.getHive();
             HiveCountLabel.setText("Ilość pszczół w ulu: " + hive.getHiveBeesCount() + "/" + hive.getHiveCapacity());
             BeeCountLabel.setText("Łączna ilość pszczół: " + hive.getTotalBeesCount());
+            if(hive.getHatchedBees()>0){
+                createAndAddNewBee();
+                hive.decrementHiveBeesCount();
+                hive.decrementHatchedBees();
+            }
         });
     }
 

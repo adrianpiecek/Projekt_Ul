@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.random.RandomGenerator;
 
+import static com.beehive.BeeApplication.hiveX;
+import static com.beehive.BeeApplication.hiveY;
+
 public class Bee extends Thread {
     private final int maxVisits; // Maksymalna liczba odwiedzin w ulu przed śmiercią
     private final int hiveCapacity; // Pojemność ula
@@ -19,18 +22,15 @@ public class Bee extends Thread {
     private int visits = 0;
     private final Hive hive;
     private double startX, startY;
-    private final double hiveX, hiveY;
     private final ImageView beeImageView;
 
-    public Bee(Hive hive, int maxVisits, ImageView beeImageView,double startX, double startY, double hiveX, double hiveY){
+    public Bee(Hive hive, int maxVisits, ImageView beeImageView,double startX, double startY){
         this.hive = hive;
         this.maxVisits = maxVisits;
         this.hiveCapacity = hive.getHiveCapacity();
         this.beeImageView = beeImageView;
         this.startX = startX;
         this.startY = startY;
-        this.hiveX = hiveX;
-        this.hiveY = hiveY;
     }
 
     private void fly(double fromX, double fromY, double toX, double toY){
@@ -66,6 +66,7 @@ public class Bee extends Thread {
             //zakończenie procesu
             System.out.println("Pszczola " + this.getId() + " umiera.");
             beeImageView.visibleProperty().set(false);
+            hive.decrementTotalBeesCount();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
