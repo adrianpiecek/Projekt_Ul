@@ -25,7 +25,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class BeeApplication extends Application {
+public class BeeApplication extends Application{
     Image beeImage = new Image(String.valueOf(getClass().getResource("bartek1.png")));
     private final List<ImageView> beeImageViews = new ArrayList<>();
     private double hiveX;
@@ -65,25 +65,38 @@ public class BeeApplication extends Application {
 
         hiveX = HiveImageView.getLayoutX();
         hiveY = HiveImageView.getLayoutY();
+        simulation = new BeeSimulation(InitialBees, maxVisits, beeImageViews,hiveX, hiveY);
 
         //załadowanie obrazków pszczół
         for (int i = 0; i < InitialBees; i++) {
-            ImageView newBeeImageView = new ImageView(beeImage);
-            double StartX = RandomGenerator.getDefault().nextInt(0, (int)hiveX- 100);
-            double StartY = RandomGenerator.getDefault().nextInt(120, 360);
-            newBeeImageView.setFitHeight(30);
-            newBeeImageView.setFitWidth(30);
-            newBeeImageView.setX(StartX);
-            newBeeImageView.setY(StartY);
-            beeImageViews.add(newBeeImageView);
-            AnchorPane.getChildren().add(newBeeImageView);
-            //newBee();
+//            ImageView newBeeImageView = new ImageView(beeImage);
+//            double StartX = RandomGenerator.getDefault().nextInt(0, (int)hiveX- 100);
+//            double StartY = RandomGenerator.getDefault().nextInt(120, 360);
+//            newBeeImageView.setFitHeight(30);
+//            newBeeImageView.setFitWidth(30);
+//            newBeeImageView.setX(StartX);
+//            newBeeImageView.setY(StartY);
+//            beeImageViews.add(newBeeImageView);
+//            AnchorPane.getChildren().add(newBeeImageView);
+            createAndAddNewBee();
         }
-        simulation = new BeeSimulation(InitialBees, maxVisits, beeImageViews,hiveX, hiveY);
         simulation.start();
 
         scheduler = Executors.newScheduledThreadPool(1);
         scheduler.scheduleAtFixedRate(this::updateHiveStatus, 0, 1, TimeUnit.SECONDS);
+    }
+
+    public void createAndAddNewBee() {
+        ImageView newBeeImageView = new ImageView(beeImage);
+        double startX = RandomGenerator.getDefault().nextInt(0, (int)hiveX- 100);
+        double startY = RandomGenerator.getDefault().nextInt(120, 360);
+        newBeeImageView.setFitHeight(30);
+        newBeeImageView.setFitWidth(30);
+        newBeeImageView.setX(startX);
+        newBeeImageView.setY(startY);
+        Bee newBee = simulation.createNewBee(newBeeImageView, startX, startY, hiveX, hiveY);
+        beeImageViews.add(newBeeImageView);
+        AnchorPane.getChildren().add(newBeeImageView);
     }
 
     private void updateHiveStatus() {

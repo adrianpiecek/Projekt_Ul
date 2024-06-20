@@ -1,7 +1,5 @@
 package com.beehive;
 
-import javafx.scene.image.ImageView;
-
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.random.RandomGenerator;
@@ -13,6 +11,7 @@ public class Hive {
     private static Semaphore hiveSemaphore;
     private final AtomicInteger hiveBeesCount = new AtomicInteger(0); // Liczba pszczół w ulu
     private final AtomicInteger totalBeesCount = new AtomicInteger(0); // Liczba pszczół łącznie
+    private final AtomicInteger hatchedBees = new AtomicInteger(0); // Liczba wyklutych pszczół
     private final int maxVisits;
 
     public Hive(int initialBees,int maxVisits){
@@ -45,6 +44,12 @@ public class Hive {
     public int getHiveCapacity() {
         return hiveCapacity;
     }
+    public int getHatchedBees(){
+        return hatchedBees.get();
+    }
+    public void decrementHatchedBees(){
+        hatchedBees.decrementAndGet();
+    }
 
     public void layEggs() throws InterruptedException {
         if (hiveBeesCount.get() < hiveCapacity) {
@@ -55,6 +60,10 @@ public class Hive {
             this.totalBeesCount.incrementAndGet();
             this.hiveBeesCount.incrementAndGet();
             System.out.println("Jajo złożone.");
+            Thread.sleep(RandomGenerator.getDefault().nextInt(2500,4000));
+//            hatchedBees.incrementAndGet();
+//            System.out.println("Jajo wyklute.");
+//            hiveSemaphore.release();
             System.out.println("Liczba pszczół w ulu: " + hiveBeesCount + " / " + hiveCapacity);
         } else {
             System.out.println("Nie ma miejsca na jaja.");
