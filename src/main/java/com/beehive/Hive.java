@@ -9,7 +9,7 @@ import static java.lang.Math.*;
 
 public class Hive {
     private static int hiveCapacity; // Maksymalna liczba pszczół w ulu
-    private static Semaphore hiveSemaphore;
+    static Semaphore hiveSemaphore;
     private static Semaphore entrance1Semaphore;
     private static Semaphore entrance2Semaphore;
     private final AtomicInteger hiveBeesCount = new AtomicInteger(0); // Liczba pszczół w ulu
@@ -38,11 +38,11 @@ public class Hive {
             System.out.println("Bee " + bee.getId() + " waiting at entrance 2");
             entranceNumber =2;
         }
+        hiveSemaphore.acquire(); // zablokuj miejsce w ulu
         while(!chosenEntrance.tryAcquire(150, TimeUnit.MILLISECONDS)){
             bee.sleep(RandomGenerator.getDefault().nextInt(50,250));
             System.out.println("Bee " + bee.getId() + " jeszcze raz probuje wejsc " + entranceNumber);
         } // Zablokuj dostęp do wybranego wejścia
-        hiveSemaphore.acquire(); // zablokuj miejsce w ulu
         hiveBeesCount.incrementAndGet();
         System.out.println("Bee " + bee.getId() + " entered the hive. Bees inside: " + hiveBeesCount + "/" + hiveCapacity);
         chosenEntrance.release();
@@ -92,6 +92,10 @@ public class Hive {
         hatchedBees.decrementAndGet();
     }
 
+    public static Semaphore getHiveSemaphore(){
+        return hiveSemaphore;
+    }
+
     public void layEggs() throws InterruptedException {
             while(true){
                 try {
@@ -116,7 +120,7 @@ public class Hive {
             Thread.sleep(RandomGenerator.getDefault().nextInt(250,750));
             this.hatchedBees.incrementAndGet();
             System.out.println(hatchedBees.get() + " Jaj gotowe do wyklucia. Liczba pszczół w ulu: " + hiveBeesCount + " / " + hiveCapacity);
-            hiveSemaphore.release();
+            //hiveSemaphore.release();
         }else{
             hiveSemaphore.release();
         }

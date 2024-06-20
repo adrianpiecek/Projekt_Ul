@@ -25,6 +25,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static com.beehive.Hive.hiveSemaphore;
+
 public class BeeApplication extends Application{
     static Image beeImage = new Image(String.valueOf(BeeApplication.class.getResource("bee.png")));
     static List<ImageView> beeImageViews = new ArrayList<>();
@@ -40,8 +42,6 @@ public class BeeApplication extends Application{
     public TextField MaxVisitsTextField;
     @FXML
     public Label BeeCountLabel;
-    @FXML
-    public Label HiveCountLabel;
     @FXML
     public Button StartButton;
     @FXML
@@ -98,6 +98,7 @@ public class BeeApplication extends Application{
                 createAndAddNewBee();
                 hive.decrementHiveBeesCount();
                 hive.decrementHatchedBees();
+                hiveSemaphore.release();
             }
         });
     }
