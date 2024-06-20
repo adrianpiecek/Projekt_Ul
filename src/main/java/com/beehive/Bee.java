@@ -3,13 +3,12 @@ package com.beehive;
 import javafx.animation.PathTransition;
 import javafx.application.Platform;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.random.RandomGenerator;
 
 import static com.beehive.BeeApplication.hiveX;
@@ -23,14 +22,16 @@ public class Bee extends Thread {
     private final Hive hive;
     private double startX, startY;
     private final ImageView beeImageView;
+    private final AnchorPane pane;
 
-    public Bee(Hive hive, int maxVisits, ImageView beeImageView,double startX, double startY){
+    public Bee(Hive hive, int maxVisits, ImageView beeImageView, AnchorPane pane, double startX, double startY){
         this.hive = hive;
         this.maxVisits = maxVisits;
         this.hiveCapacity = hive.getHiveCapacity();
         this.beeImageView = beeImageView;
         this.startX = startX;
         this.startY = startY;
+        this.pane = pane;
     }
 
     private void fly(double fromX, double fromY, double toX, double toY){
@@ -45,7 +46,9 @@ public class Bee extends Thread {
         hivePathTransition.play();
     }
 
-
+    public int getVisits() {
+        return visits;
+    }
 
     @Override
     public void run() {
@@ -73,7 +76,8 @@ public class Bee extends Thread {
             }
             //zakończenie procesu
             System.out.println("Pszczola " + this.getId() + " umiera.");
-            beeImageView.visibleProperty().set(false);
+            //beeImageView.visibleProperty().set(false);
+            Platform.runLater(()->pane.getChildren().remove(beeImageView));
             hive.decrementTotalBeesCount();
         } catch (InterruptedException e) {
             System.out.println("Pszczole " + this.getId() + " przerwano.");
@@ -84,4 +88,6 @@ public class Bee extends Thread {
             }
         }
     }
+
+
 }

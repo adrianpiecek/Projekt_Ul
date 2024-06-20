@@ -15,18 +15,16 @@ public class Hive {
     private final AtomicInteger hiveBeesCount = new AtomicInteger(0); // Liczba pszczół w ulu
     private final AtomicInteger totalBeesCount = new AtomicInteger(0); // Liczba pszczół łącznie
     private final AtomicInteger hatchedBees = new AtomicInteger(0); // Liczba wyklutych pszczół
-    private final int maxVisits;
-    private final BeeSimulation simulation;
     private final AtomicInteger nextEntrance = new AtomicInteger(0); // Do śledzenia następnego wejścia
+    private final int maxVisits; // Maksymalna liczba odwiedzin w ulu przed śmiercią
 
 
-    public Hive(int initialBees,int maxVisits, BeeSimulation simulation){
+    public Hive(int initialBees, int maxVisits){
         hiveCapacity = (int)(floor((double) initialBees /2))-1;
         hiveSemaphore = new Semaphore(hiveCapacity, true);
         entrance1Semaphore = new Semaphore(1, true);
         entrance2Semaphore = new Semaphore(1, true);
         this.maxVisits = maxVisits;
-        this.simulation = simulation;
     }
     public int enterHive(Bee bee) throws InterruptedException {
         int entranceNumber = 0;
@@ -59,6 +57,9 @@ public class Hive {
         System.out.println("Bee " + bee.getId() + " exited the hive. Bees inside: " + hiveBeesCount);
         hiveSemaphore.release();
         chosenEntrance.release();
+        if(bee.getVisits() >= maxVisits){
+
+        }
     }
 
     private Semaphore chooseEntrance() {
@@ -114,7 +115,7 @@ public class Hive {
         if (hiveBeesCount.get() < hiveCapacity) {
             // Symulacja składania jaj
             System.out.println("Królowa składa jaja...");
-            Thread.sleep(RandomGenerator.getDefault().nextInt(300*(totalBeesCount.get()/hiveCapacity),300*(totalBeesCount.get()/hiveCapacity)+20));
+            Thread.sleep(RandomGenerator.getDefault().nextInt(300*(totalBeesCount.get()+1/hiveCapacity)+maxVisits*15,300*(totalBeesCount.get()+1/hiveCapacity)+20)+maxVisits*15);
             this.hiveBeesCount.incrementAndGet();
             System.out.println("Jajo złożone.");
             Thread.sleep(RandomGenerator.getDefault().nextInt(5*totalBeesCount.get()+1,5*totalBeesCount.get()+40));

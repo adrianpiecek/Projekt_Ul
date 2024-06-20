@@ -13,14 +13,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-import java.net.URL;
 import java.util.random.RandomGenerator;
 import java.io.IOException;
 
-import static java.lang.Integer.parseInt;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -29,7 +24,7 @@ import static com.beehive.Hive.hiveSemaphore;
 
 public class BeeApplication extends Application{
     static Image beeImage = new Image(String.valueOf(BeeApplication.class.getResource("bee.png")));
-    static List<ImageView> beeImageViews = new ArrayList<>();
+    //static List<ImageView> beeImageViews = new ArrayList<>();
     static double hiveX;
     static double hiveY;
 
@@ -67,7 +62,7 @@ public class BeeApplication extends Application{
 
         hiveX = HiveImageView.getLayoutX() + 50;
         hiveY = HiveImageView.getLayoutY();
-        simulation = new BeeSimulation(InitialBees, maxVisits);
+        simulation = new BeeSimulation(InitialBees, maxVisits, AnchorPane);
 
         //załadowanie obrazków pszczół i stworzenie ich
         for (int i = 0; i < InitialBees; i++) {
@@ -88,8 +83,8 @@ public class BeeApplication extends Application{
         newBeeImageView.setX(startX);
         newBeeImageView.setY(startY);
         simulation.createNewBee(newBeeImageView, startX, startY);
-        beeImageViews.add(newBeeImageView);
         AnchorPane.getChildren().add(newBeeImageView);
+
     }
 
     private void updateHiveStatus() {
@@ -106,7 +101,6 @@ public class BeeApplication extends Application{
             }
         });
     }
-
     @Override
     public void stop() {
         if(scheduler != null) {
