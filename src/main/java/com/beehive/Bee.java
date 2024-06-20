@@ -3,91 +3,70 @@ package com.beehive;
 import javafx.animation.PathTransition;
 import javafx.application.Platform;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.Image;
+import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
+import javafx.util.Duration;
 
-import java.util.concurrent.Semaphore;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.random.RandomGenerator;
 
 public class Bee extends Thread {
-    private int maxVisits; // Maksymalna liczba odwiedzin w ulu przed śmiercią
-    private int hiveCapacity; // Pojemność ula
-    private static Semaphore entranceSemaphore = new Semaphore(1); // Semafor dla wejścia do ula
+    private final int maxVisits; // Maksymalna liczba odwiedzin w ulu przed śmiercią
+    private final int hiveCapacity; // Pojemność ula
 
     private int visits = 0;
     private final Hive hive;
-    private final double startX, startY;
+    private double startX, startY, hiveX, hiveY;
     private final ImageView beeImageView;
 
-    public Bee(Hive hive, int maxVisits, int hiveCapacity, ImageView beeImageView,double startX, double startY) {
+    public Bee(Hive hive, int maxVisits, ImageView beeImageView,double startX, double startY, double hiveX, double hiveY){
         this.hive = hive;
         this.maxVisits = maxVisits;
-        this.hiveCapacity = hiveCapacity;
+        this.hiveCapacity = hive.getHiveCapacity();
         this.beeImageView = beeImageView;
         this.startX = startX;
         this.startY = startY;
+        this.hiveX = hiveX;
+        this.hiveY = hiveY;
     }
 
-    private void animateBeeToHive() {
-        Platform.runLater(() -> {
-            double hiveX = 460;
-            double hiveY = 200;
+    private void fly(double fromX, double fromY, double toX, double toY){
+        Path hivePath = new Path();
+        hivePath.getElements().add(new MoveTo(fromX, fromY));
+        hivePath.getElements().add(new LineTo(toX, toY));
 
-            Path pathToHive = new Path();
-            pathToHive.getElements().add(new MoveTo(startX, startY));
-            pathToHive.getElements().add(new MoveTo(hiveX, hiveY));
-
-            PathTransition pathTransitionToHive = new PathTransition();
-            pathTransitionToHive.setDuration(javafx.util.Duration.seconds(2));
-            pathTransitionToHive.setPath(pathToHive);
-            pathTransitionToHive.setNode(beeImageView);
-            pathTransitionToHive.play();
-        });
+        PathTransition hivePathTransition = new PathTransition();
+        hivePathTransition.setDuration(Duration.seconds(1));
+        hivePathTransition.setPath(hivePath);
+        hivePathTransition.setNode(beeImageView);
+        hivePathTransition.play();
     }
 
-    private void animateBeeFromHive() {
-        Platform.runLater(() -> {
-            Path pathFromHive = new Path();
-            pathFromHive.getElements().add(new MoveTo(460, 200));
-            pathFromHive.getElements().add(new MoveTo(startX, startY));
 
-            PathTransition pathTransitionFromHive = new PathTransition();
-            pathTransitionFromHive.setDuration(javafx.util.Duration.seconds(2));
-            pathTransitionFromHive.setPath(pathFromHive);
-            pathTransitionFromHive.setNode(beeImageView);
-            pathTransitionFromHive.play();
-        });
-    }
-
-    public void showImage(){
-        beeImageView.setImage(new Image("file:resources/images/bee.png"));
-
-    }
 
     @Override
     public void run() {
         try {
             while (visits < maxVisits) {
-                if(hive.getHiveBeesCount() >= hiveCapacity) {
-                    System.out.println("Pszczola " + this.getId() + " nie moze wejsc do ula, bo jest pelny.");
-                    //czekaj losowy czas
-                    Thread.sleep(RandomGenerator.getDefault().nextInt(1000, 5000));
-                    continue;
-                }
-                Platform.runLater(this::animateBeeToHive);
-                entranceSemaphore.acquire(); // Wejście do ula
                 hive.enterHive(this);
-                entranceSemaphore.release(); // Zwolnienie wejścia
+                //fly(startX, startY, hiveX, hiveY);
                 // Pszczoła przebywa w ulu
-                Thread.sleep(2000); // Symulacja przebywania w ulu
+                Thread.sleep(RandomGenerator.getDefault().nextInt(0,2500)); // Symulacja przebywania w ulu
                 hive.exitHive(this);
-                Platform.runLater(this::animateBeeFromHive);
+                int randomX = RandomGenerator.getDefault().nextInt(0, (int)hiveX - 100);
+                int randomY = RandomGenerator.getDefault().nextInt(120, 360);
+                //fly(hiveX, hiveY, randomX, randomY);
+                this.startX= randomX;
+                this.startY= randomY;
                 visits++;
                 // Pszczoła przebywa poza ulem
-                Thread.sleep(2000); // Symulacja przebywania poza ulem
+                Thread.sleep(RandomGenerator.getDefault().nextInt(0,2500)); // Symulacja przebywania poza ulem
             }
+            //zakończenie procesu
             System.out.println("Pszczola " + this.getId() + " umiera.");
+            //beeImageView.visibleProperty().set(false);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

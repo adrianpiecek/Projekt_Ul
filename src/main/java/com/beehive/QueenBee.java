@@ -1,7 +1,5 @@
 package com.beehive;
 
-import java.util.concurrent.Semaphore;
-
 public class QueenBee extends Thread {
     private Hive hive;
 
